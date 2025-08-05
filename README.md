@@ -1,1 +1,2 @@
-Este é o repositório do Robô Leone Brabus.
+# Leone Brabus
+Robô de atendimento automatizado via WhatsApp.
