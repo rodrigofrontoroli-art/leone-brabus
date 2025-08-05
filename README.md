@@ -1,2 +1,3 @@
 # Leone Brabus
-Robô de atendimento automatizado via WhatsApp.
+
+Backend do robô de atendimento automatizado da Brabus Negócios Imobiliários.
