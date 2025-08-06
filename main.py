@@ -1,40 +1,31 @@
 from flask import Flask, request, jsonify
+import os
 from datetime import datetime
 
 app = Flask(__name__)
 
-@app.route("/", methods=["GET"])
+@app.route('/', methods=['GET'])
 def home():
-    return "Leone Brabus está rodando com sucesso!"
+    return 'Leone Brabus está rodando com sucesso!'
 
-@app.route("/webhook", methods=["POST"])
+@app.route('/webhook', methods=['POST'])
 def webhook():
-    try:
-        data = request.get_json()
-        print("Mensagem recebida:", data)
+    data = request.json
 
-        # Extrai o telefone e a mensagem recebida
-        phone = data.get("phone", "")
-        msg = data.get("text", "").lower()
+    # LOG SIMPLES NO CONSOLE
+    print(f"[{datetime.now()}] Webhook recebido:")
+    print(data)
 
-        # Resposta básica
-        if "studio" in msg:
-            reply = "Perfeito! Você está buscando um studio para investir ou para morar?"
-        elif "oi" in msg or "olá" in msg:
-            reply = "Olá! Sou o Leone, corretor da Brabus. Me diz uma coisa: qual tipo de imóvel você procura?"
-        else:
-            reply = "Legal! Me conta um pouco mais do que você está buscando."
+    # EXEMPLO DE TRATAMENTO DE MENSAGEM TEXTO
+    if data.get('type') == 'message' and 'text' in data:
+        mensagem = data['text']
+        telefone = data.get('phone')
+        print(f"Mensagem de {telefone}: {mensagem}")
 
-        # Monta resposta para Z-API
-        return jsonify({
-            "messages": [
-                {
-                    "text": reply,
-                    "phone": phone
-                }
-            ]
-        }), 200
+        # AQUI ENTRA SUA LÓGICA DE RESPOSTA INTELIGENTE (em breve)
 
-    except Exception as e:
-        print("Erro:", e)
-        return jsonify({"error": str(e)}), 500
+    return jsonify({'status': 'ok'}), 200
+
+if __name__ == '__main__':
+    port = int(os.environ.get('PORT', 8080))
+    app.run(host='0.0.0.0', port=port)
